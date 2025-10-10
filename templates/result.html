@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landslide Risk Assessment</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="hero-section">
+        <div class="overlay"></div>
+        <div class="container">
+            <form action="{{ url_for('predict')}}" method="post">
+                <h1 class="main-heading">
+                    <i class="fas fa-mountain"></i>
+                    Landslide Risk Assessment
+                </h1>
+                
+                <div class="results-card">
+                    {% if prediction == 0 %}
+                        <div class="risk-level high">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <h2>High Risk</h2>
+                            <p class="warning">Immediate action required!</p>
+                            <p>Confidence Level: {{ confidence }}%</p>
+                            <h2>Confidence Graph</h2>
+                            <img src="{{ graph_path }}" alt="Confidence Graph">
+                        </div>
+                    {% elif prediction == 1 %}
+                        <div class="risk-level moderate">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <h2>Moderate Risk</h2>
+                            <p class="warning">Caution advised</p>
+                            <p>Confidence Level: {{ confidence }}%</p>
+                            <h2>Confidence Graph</h2>
+                            <img src="{{ graph }}" alt="Confidence Graph" style="background: transparent;">
+                            <img class="gif1" src="{{ url_for('static', filename='yes.webp')}}" alt="Success Image">
+                        </div>
+                    {% elif prediction == 2 %}
+                        <div class="risk-level low">
+                            <i class="fas fa-info-circle"></i>
+                            <h2>Low Risk</h2>
+                            <p class="safe">Monitor conditions</p>
+                            <p>Confidence Level: {{ confidence }}%</p>
+                            <h2>Confidence Graph</h2>
+                            <img src="{{ graph }}" alt="Confidence Graph" style="background: transparent;">
+                            <img class="gif1" src="{{ url_for('static', filename='yes.webp')}}" alt="Success Image">
+                        </div>
+                    {% elif prediction == 3 %}
+                        <div class="risk-level safe">
+                            <i class="fas fa-check-circle"></i>
+                            <h2>Safe Zone</h2>
+                            <p class="safe">No immediate risk detected</p>
+                            <p>Confidence Level: {{ confidence }}%</p>
+                            <h2>Confidence Graph</h2>
+                            <img src="{{ graph }}" alt="Confidence Graph" style="background: transparent;">
+                            <img class="gif1" src="{{ url_for('static', filename='yes.webp')}}" alt="Success Image">
+                        </div>
+                    {% endif %}
+
+                    <div class="location-details">
+                        <h3><i class="fas fa-map-marker-alt"></i> Assessment Location</h3>
+                        <p class="location-text">{{ url }}</p>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background:  linear-gradient(135deg, rgba(44, 82, 130, 0.95), rgba(99, 179, 237, 0.9));
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .main-heading {
+            color: white;
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .results-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .risk-level {
+            text-align: center;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .risk-level i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .high {
+            background: #ffe1e1;
+            color: #d63031;
+        }
+
+        .moderate {
+            background: #ffecd1;
+            color: #fd9644;
+        }
+
+        .low {
+            background: #e1f5fe;
+            color: #0984e3;
+        }
+
+        .safe {
+            background: #e2f3eb;
+            color: #00b894;
+        }
+
+        .risk-level img {
+            max-width: 100%;
+            height: auto;
+            margin: 1rem 0;
+        }
+
+        .gif1 {
+            max-width: 200px;
+            margin: 1rem auto;
+            display: block;
+        }
+
+        .location-details {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .location-text {
+            word-break: break-all;
+            margin-top: 0.5rem;
+            color: #666;
+        }
+
+        h2 {
+            margin: 1rem 0;
+        }
+
+        h3 {
+            color: #2d3436;
+            margin-bottom: 1rem;
+        }
+
+        .warning {
+            font-weight: bold;
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .main-heading {
+                font-size: 2rem;
+            }
+
+            .results-card {
+                padding: 1rem;
+            }
+        }
+    </style>
+</body>
+</html>
