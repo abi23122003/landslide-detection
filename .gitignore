@@ -47,3 +47,6 @@ build/
 app_clean.py
 app_updated.py
 check_*.py
+
+summa/.venv/
+.venv/
