@@ -49,14 +49,14 @@
 
         /* ── Theme toggle button ── */
         .theme-toggle{
-            position:fixed;top:24px;left:24px;z-index:100;
+            position:fixed;top:24px;right:24px;z-index:200;
             width:48px;height:48px;border-radius:50%;border:none;cursor:pointer;
-            background:var(--glass,rgba(255,255,255,0.08));backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+            background:rgba(255,255,255,0.08);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
             border:1px solid rgba(255,255,255,0.15);
             color:#fff;font-size:1.2rem;display:flex;align-items:center;justify-content:center;
             transition:all .35s ease;box-shadow:0 4px 16px rgba(0,0,0,0.15);
         }
-        .theme-toggle:hover{transform:scale(1.1) rotate(20deg);background:rgba(255,255,255,0.2);}
+        .theme-toggle:hover{transform:scale(1.1);background:rgba(255,255,255,0.18);border-color:rgba(255,255,255,0.35);box-shadow:0 0 18px rgba(99,179,237,0.3);}
         body.light-mode .theme-toggle{
             background:rgba(44,82,130,0.1);border-color:rgba(44,82,130,0.2);color:#2c5282;
             box-shadow:0 4px 16px rgba(0,0,0,0.06);
@@ -276,8 +276,8 @@
     <div class="particles" id="particles"></div>
 
     <!-- Theme toggle -->
-    <button class="theme-toggle" id="theme-toggle" title="Toggle light/dark mode">
-        <i class="fas fa-moon"></i>
+    <button class="theme-toggle" id="themeToggle" title="Toggle dark / light mode">
+        <i class="fas fa-moon" id="themeIcon"></i>
     </button>
 
     <!-- ═══════════════  HERO SECTION  ═══════════════ -->
@@ -472,25 +472,19 @@
         btn.appendChild(circle);
     }
 
-    /* ── Theme toggle (synced across pages) ── */
+    /* ── Theme toggle ── */
     (function(){
-        const btn=document.getElementById('theme-toggle');
-        const icon=btn.querySelector('i');
-        function applyTheme(mode){
-            if(mode==='light'){
-                document.body.classList.add('light-mode');
-                icon.classList.remove('fa-moon');icon.classList.add('fa-sun');
-            }else{
-                document.body.classList.remove('light-mode');
-                icon.classList.remove('fa-sun');icon.classList.add('fa-moon');
-            }
+        const btn=document.getElementById('themeToggle'),icon=document.getElementById('themeIcon');
+        function applyTheme(dark){
+            document.body.classList.toggle('light-mode',!dark);
+            icon.classList.toggle('fa-moon',dark);
+            icon.classList.toggle('fa-sun',!dark);
         }
-        applyTheme(localStorage.getItem('theme')||'dark');
+        applyTheme((localStorage.getItem('theme')||'dark')==='dark');
         btn.addEventListener('click',()=>{
-            const isLight=document.body.classList.toggle('light-mode');
-            localStorage.setItem('theme',isLight?'light':'dark');
-            icon.classList.toggle('fa-moon',!isLight);
-            icon.classList.toggle('fa-sun',isLight);
+            const dark=document.body.classList.contains('light-mode');
+            localStorage.setItem('theme',dark?'dark':'light');
+            applyTheme(dark);
         });
     })();
     </script>

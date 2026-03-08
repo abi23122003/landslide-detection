@@ -42,9 +42,82 @@
         body.light-mode input:focus{border-color:#2c5282;box-shadow:0 0 0 3px rgba(44,82,130,0.12);}
         body.light-mode input::placeholder{color:#a0aec0;}
 
-        .theme-toggle{position:fixed;top:24px;left:24px;z-index:100;width:48px;height:48px;border-radius:50%;border:none;cursor:pointer;background:rgba(255,255,255,0.08);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.15);color:#fff;font-size:1.2rem;display:flex;align-items:center;justify-content:center;transition:all .35s ease;box-shadow:0 4px 16px rgba(0,0,0,0.15);}
-        .theme-toggle:hover{transform:scale(1.1) rotate(20deg);background:rgba(255,255,255,0.2);}
-        body.light-mode .theme-toggle{background:rgba(44,82,130,0.1);border-color:rgba(44,82,130,0.2);color:#2c5282;box-shadow:0 4px 16px rgba(0,0,0,0.06);}
+        /* ── Profile dropdown (replaces old theme-toggle + header-right) ── */
+        .profile-wrapper{position:relative;}
+        .profile-btn{
+            width:44px;height:44px;border-radius:50%;border:2px solid rgba(255,255,255,0.25);
+            background:linear-gradient(135deg,#63b3ed,#2c5282);color:#fff;
+            font-size:1.1rem;font-weight:700;cursor:pointer;display:flex;align-items:center;
+            justify-content:center;transition:all .3s ease;text-transform:uppercase;
+        }
+        .profile-btn:hover{transform:scale(1.08);border-color:rgba(255,255,255,0.5);box-shadow:0 0 18px rgba(99,179,237,0.35);}
+        body.light-mode .profile-btn{border-color:rgba(44,82,130,0.3);}
+
+        .profile-dropdown{
+            display:none;position:absolute;right:0;top:calc(100% + 10px);
+            min-width:240px;border-radius:14px;padding:.5rem 0;z-index:200;
+            background:rgba(20,20,30,0.95);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+            border:1px solid rgba(255,255,255,0.12);
+            box-shadow:0 16px 48px rgba(0,0,0,0.45);animation:dropIn .2s ease;
+        }
+        @keyframes dropIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+        .profile-wrapper.open .profile-dropdown{display:block;}
+
+        body.light-mode .profile-dropdown{
+            background:rgba(255,255,255,0.96);border-color:rgba(0,0,0,0.08);
+            box-shadow:0 16px 48px rgba(0,0,0,0.12);
+        }
+
+        .profile-dropdown .dd-header{
+            padding:1rem 1.2rem;border-bottom:1px solid rgba(255,255,255,0.08);
+            display:flex;align-items:center;gap:.75rem;
+        }
+        body.light-mode .profile-dropdown .dd-header{border-bottom-color:rgba(0,0,0,0.06);}
+        .dd-avatar{
+            width:38px;height:38px;border-radius:50%;
+            background:linear-gradient(135deg,#63b3ed,#2c5282);color:#fff;
+            display:flex;align-items:center;justify-content:center;
+            font-weight:700;font-size:.95rem;flex-shrink:0;text-transform:uppercase;
+        }
+        .dd-name{font-weight:600;font-size:.95rem;color:#fff;}
+        .dd-role{font-size:.75rem;color:rgba(255,255,255,0.5);}
+        body.light-mode .dd-name{color:#1a202c;}
+        body.light-mode .dd-role{color:#718096;}
+
+        .dd-item{
+            display:flex;align-items:center;gap:.75rem;padding:.7rem 1.2rem;
+            cursor:pointer;transition:background .2s;color:rgba(255,255,255,0.85);
+            font-size:.9rem;text-decoration:none;border:none;background:none;width:100%;
+        }
+        .dd-item:hover{background:rgba(255,255,255,0.06);}
+        body.light-mode .dd-item{color:#2d3748;}
+        body.light-mode .dd-item:hover{background:rgba(44,82,130,0.06);}
+        .dd-item i{width:20px;text-align:center;font-size:.95rem;color:#63b3ed;}
+        body.light-mode .dd-item i{color:#2c5282;}
+        .dd-divider{height:1px;background:rgba(255,255,255,0.08);margin:.25rem 0;}
+        body.light-mode .dd-divider{background:rgba(0,0,0,0.06);}
+
+        /* Toggle switch inside dropdown */
+        .toggle-row{display:flex;align-items:center;justify-content:space-between;padding:.7rem 1.2rem;}
+        .toggle-label{display:flex;align-items:center;gap:.75rem;font-size:.9rem;color:rgba(255,255,255,0.85);}
+        body.light-mode .toggle-label{color:#2d3748;}
+        .toggle-label i{width:20px;text-align:center;color:#63b3ed;}
+        body.light-mode .toggle-label i{color:#2c5282;}
+        .switch{position:relative;width:42px;height:24px;flex-shrink:0;}
+        .switch input{opacity:0;width:0;height:0;}
+        .slider{
+            position:absolute;inset:0;cursor:pointer;border-radius:24px;
+            background:rgba(255,255,255,0.15);transition:.3s;
+        }
+        .slider:before{
+            content:'';position:absolute;height:18px;width:18px;left:3px;bottom:3px;
+            background:#fff;border-radius:50%;transition:.3s;
+        }
+        .switch input:checked+.slider{background:#63b3ed;}
+        .switch input:checked+.slider:before{transform:translateX(18px);}
+        body.light-mode .slider{background:#cbd5e0;}
+        body.light-mode .slider:before{background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.15);}
+        body.light-mode .switch input:checked+.slider{background:#2c5282;}
 
         /* Header */
         .header {
@@ -268,11 +341,25 @@
             <h2>LandSlide Detection</h2>
         </div>
         <div class="header-right">
-            <p class="welcome-msg">Welcome, <span>{{ username }}</span>!</p>
-            <a href="/logout" class="logout-btn">
-                <i class="fas fa-sign-out-alt"></i>
-                Logout
-            </a>
+            <div class="profile-wrapper" id="profileWrapper">
+                <button class="profile-btn" id="profileBtn" title="Profile">{{ username[0] if username else 'U' }}</button>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <div class="dd-header">
+                        <div class="dd-avatar">{{ username[0] if username else 'U' }}</div>
+                        <div>
+                            <div class="dd-name">{{ username }}</div>
+                            <div class="dd-role">Analyst</div>
+                        </div>
+                    </div>
+                    <div class="dd-divider"></div>
+                    <div class="toggle-row">
+                        <span class="toggle-label"><i class="fas fa-moon" id="themeIcon"></i> Dark Mode</span>
+                        <label class="switch"><input type="checkbox" id="themeSwitch"><span class="slider"></span></label>
+                    </div>
+                    <div class="dd-divider"></div>
+                    <a href="/logout" class="dd-item"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -285,32 +372,38 @@
 
         <div class="ml-container">
             {% if error %}
-            <div style="background: #ffe1e1; color: #d63031; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; border-left: 4px solid #d63031;">
+            <div style="background: rgba(214,48,49,0.15); color: #fc8181; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; border-left: 4px solid #d63031; line-height: 1.8;">
                 <i class="fas fa-exclamation-circle"></i>
-                <strong>Error:</strong> {{ error }}
+                <strong>Validation Error:</strong><br>{{ error }}
             </div>
             {% endif %}
-            
-            <form action="{{ url_for('predict') }}" method="POST">
+
+            <form action="{{ url_for('predict') }}" method="POST" novalidate>
                 <div class="form-grid">
 
                     <div class="input-group">
                         <h3>Slope Angle (degrees)</h3>
-                        <input type="text" name="Slope Angle (degrees)" placeholder="e.g., 30" required>
+                        <input type="number" name="Slope Angle (degrees)"
+                               placeholder="e.g., 30" min="0" max="90" step="any"
+                               value="{{ old['Slope Angle (degrees)'] if old else '' }}" required>
                         <div class="info-tooltip">
                             <i class="fas fa-info-circle"></i>
-                            <span class="tooltip-text">Angle of the slope in degrees</span>
+                            <span class="tooltip-text">Angle of the slope (0–90°)</span>
                         </div>
                     </div>
 
                     <div class="input-group">
                         <h3>Rainfall (mm)</h3>
-                        <input type="text" name="Rainfall (mm)" placeholder="e.g., 150" required>
+                        <input type="number" name="Rainfall (mm)"
+                               placeholder="e.g., 150" min="0" max="500" step="any"
+                               value="{{ old['Rainfall (mm)'] if old else '' }}" required>
                     </div>
 
                     <div class="input-group">
                         <h3>Moisture Content (%)</h3>
-                        <input type="text" name="Moisture Content (%)" placeholder="e.g., 35" required>
+                        <input type="number" name="Moisture Content (%)"
+                               placeholder="e.g., 35" min="0" max="100" step="any"
+                               value="{{ old['Moisture Content (%)'] if old else '' }}" required>
                     </div>
 
                 </div>
@@ -323,14 +416,23 @@
         </div>
     </div>
 
-    <button class="theme-toggle" id="theme-toggle" title="Toggle light/dark mode"><i class="fas fa-moon"></i></button>
-
     <script>
     (function(){
-        const btn=document.getElementById('theme-toggle'),icon=btn.querySelector('i');
-        function applyTheme(m){if(m==='light'){document.body.classList.add('light-mode');icon.classList.remove('fa-moon');icon.classList.add('fa-sun');}else{document.body.classList.remove('light-mode');icon.classList.remove('fa-sun');icon.classList.add('fa-moon');}}
-        applyTheme(localStorage.getItem('theme')||'dark');
-        btn.addEventListener('click',()=>{const l=document.body.classList.toggle('light-mode');localStorage.setItem('theme',l?'light':'dark');icon.classList.toggle('fa-moon',!l);icon.classList.toggle('fa-sun',l);});
+        /* ── Profile dropdown toggle ── */
+        const wrapper=document.getElementById('profileWrapper'),btn=document.getElementById('profileBtn');
+        btn.addEventListener('click',e=>{e.stopPropagation();wrapper.classList.toggle('open');});
+        document.addEventListener('click',e=>{if(!wrapper.contains(e.target))wrapper.classList.remove('open');});
+
+        /* ── Theme toggle (inside dropdown) ── */
+        const sw=document.getElementById('themeSwitch'),icon=document.getElementById('themeIcon');
+        function applyTheme(dark){
+            document.body.classList.toggle('light-mode',!dark);
+            sw.checked=dark;
+            icon.classList.toggle('fa-moon',dark);
+            icon.classList.toggle('fa-sun',!dark);
+        }
+        applyTheme((localStorage.getItem('theme')||'dark')==='dark');
+        sw.addEventListener('change',()=>{const dark=sw.checked;localStorage.setItem('theme',dark?'dark':'light');applyTheme(dark);});
     })();
     </script>
 </body>
