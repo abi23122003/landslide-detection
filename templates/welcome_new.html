@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <title>Dashboard - Landslide Risk Assessment</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Inter', sans-serif;
         }
 
         :root {
@@ -24,16 +24,35 @@
 
         body {
             min-height: 100vh;
-            background: linear-gradient(135deg, rgba(44, 82, 130, 0.95), rgba(99, 179, 237, 0.9)),
-                        url("/api/placeholder/1920/1080") center/cover fixed;
+            background: linear-gradient(-45deg,#000000,#0a0a10,#060612,#000000,#080810);
+            background-size:400% 400%;animation:gradBG 18s ease infinite;
             padding: 0;
         }
+        @keyframes gradBG{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+        /* Light mode */
+        body.light-mode{background:linear-gradient(-45deg,#ffffff,#f0f7ff,#e8f1fd,#ffffff,#f5f9ff);background-size:400% 400%;}
+        body.light-mode .header{background:rgba(255,255,255,0.9);box-shadow:0 2px 10px rgba(0,0,0,0.06);border-bottom:none;backdrop-filter:none;-webkit-backdrop-filter:none;}
+        body.light-mode .header-left i,body.light-mode .header-left h2{color:#2c5282;}
+        body.light-mode .welcome-msg{color:#2d3748;}
+        body.light-mode .container-heading,body.light-mode .container-heading p{color:#1a202c !important;}
+        body.light-mode .ml-container{background:rgba(255,255,255,0.9);box-shadow:0 10px 25px rgba(0,0,0,0.06);border:none;backdrop-filter:none;-webkit-backdrop-filter:none;}
+        body.light-mode h3{color:#2d3748;}
+        body.light-mode input{background:#fff;border-color:#cbd5e0;color:#1a202c;}
+        body.light-mode input:focus{border-color:#2c5282;box-shadow:0 0 0 3px rgba(44,82,130,0.12);}
+        body.light-mode input::placeholder{color:#a0aec0;}
+
+        .theme-toggle{position:fixed;top:24px;left:24px;z-index:100;width:48px;height:48px;border-radius:50%;border:none;cursor:pointer;background:rgba(255,255,255,0.08);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.15);color:#fff;font-size:1.2rem;display:flex;align-items:center;justify-content:center;transition:all .35s ease;box-shadow:0 4px 16px rgba(0,0,0,0.15);}
+        .theme-toggle:hover{transform:scale(1.1) rotate(20deg);background:rgba(255,255,255,0.2);}
+        body.light-mode .theme-toggle{background:rgba(44,82,130,0.1);border-color:rgba(44,82,130,0.2);color:#2c5282;box-shadow:0 4px 16px rgba(0,0,0,0.06);}
 
         /* Header */
         .header {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
             padding: 1rem 2rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -47,11 +66,11 @@
 
         .header-left i {
             font-size: 2rem;
-            color: var(--primary-color);
+            color: #63b3ed;
         }
 
         .header-left h2 {
-            color: var(--primary-color);
+            color: #fff;
             font-size: 1.5rem;
         }
 
@@ -62,7 +81,7 @@
         }
 
         .welcome-msg {
-            color: var(--dark-color);
+            color: rgba(255,255,255,0.8);
             font-size: 1rem;
         }
 
@@ -108,10 +127,12 @@
         }
 
         .ml-container {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.12);
             border-radius: 15px;
             padding: 2rem;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
             animation: fadeIn 0.5s ease;
         }
 
@@ -126,7 +147,7 @@
         }
 
         h3 {
-            color: var(--dark-color);
+            color: rgba(255,255,255,0.85);
             font-size: 0.9rem;
             margin-bottom: 0.5rem;
             font-weight: 500;
@@ -135,21 +156,22 @@
         input {
             width: 100%;
             padding: 0.75rem;
-            border: 2px solid #e2e8f0;
+            border: 2px solid rgba(255,255,255,0.15);
             border-radius: 8px;
             font-size: 0.95rem;
             transition: all 0.3s ease;
-            background: white;
+            background: rgba(255,255,255,0.08);
+            color: #fff;
         }
 
         input:focus {
             outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(44, 82, 130, 0.2);
+            border-color: #63b3ed;
+            box-shadow: 0 0 0 3px rgba(99, 179, 237, 0.25);
         }
 
         input::placeholder {
-            color: #a0aec0;
+            color: rgba(255,255,255,0.4);
         }
 
         #sub {
@@ -300,5 +322,16 @@
             </form>
         </div>
     </div>
+
+    <button class="theme-toggle" id="theme-toggle" title="Toggle light/dark mode"><i class="fas fa-moon"></i></button>
+
+    <script>
+    (function(){
+        const btn=document.getElementById('theme-toggle'),icon=btn.querySelector('i');
+        function applyTheme(m){if(m==='light'){document.body.classList.add('light-mode');icon.classList.remove('fa-moon');icon.classList.add('fa-sun');}else{document.body.classList.remove('light-mode');icon.classList.remove('fa-sun');icon.classList.add('fa-moon');}}
+        applyTheme(localStorage.getItem('theme')||'dark');
+        btn.addEventListener('click',()=>{const l=document.body.classList.toggle('light-mode');localStorage.setItem('theme',l?'light':'dark');icon.classList.toggle('fa-moon',!l);icon.classList.toggle('fa-sun',l);});
+    })();
+    </script>
 </body>
 </html>

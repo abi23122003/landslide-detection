@@ -67,6 +67,8 @@
         </div>
     </div>
 
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -75,15 +77,31 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', sans-serif;
             line-height: 1.6;
-            color: #333;
-            background:  linear-gradient(135deg, rgba(44, 82, 130, 0.95), rgba(99, 179, 237, 0.9));
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
+            color: #e2e8f0;
+            background: linear-gradient(-45deg,#000000,#0a0a10,#060612,#000000,#080810);
+            background-size: 400% 400%;
+            animation: gradBG 18s ease infinite;
             min-height: 100vh;
         }
+        @keyframes gradBG{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+        /* Light mode */
+        body.light-mode{background:linear-gradient(-45deg,#ffffff,#f0f7ff,#e8f1fd,#ffffff,#f5f9ff);background-size:400% 400%;color:#333;}
+        body.light-mode .results-card{background:rgba(255,255,255,0.92);border:none;backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:0 10px 20px rgba(0,0,0,0.06);}
+        body.light-mode .main-heading{color:#1a202c;text-shadow:none;}
+        body.light-mode .location-details{background:rgba(44,82,130,0.04);}
+        body.light-mode h3{color:#2d3748;}
+        body.light-mode .location-text{color:#666;}
+        body.light-mode .high{background:#ffe1e1;color:#d63031;}
+        body.light-mode .moderate{background:#ffecd1;color:#fd9644;}
+        body.light-mode .low{background:#e1f5fe;color:#0984e3;}
+        body.light-mode .safe{background:#e2f3eb;color:#00b894;}
+
+        .theme-toggle{position:fixed;top:24px;left:24px;z-index:100;width:48px;height:48px;border-radius:50%;border:none;cursor:pointer;background:rgba(255,255,255,0.08);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.15);color:#fff;font-size:1.2rem;display:flex;align-items:center;justify-content:center;transition:all .35s ease;box-shadow:0 4px 16px rgba(0,0,0,0.15);}
+        .theme-toggle:hover{transform:scale(1.1) rotate(20deg);background:rgba(255,255,255,0.2);}
+        body.light-mode .theme-toggle{background:rgba(44,82,130,0.1);border-color:rgba(44,82,130,0.2);color:#2c5282;box-shadow:0 4px 16px rgba(0,0,0,0.06);}
 
         .hero-section {
             min-height: 100vh;
@@ -109,10 +127,12 @@
         }
 
         .results-card {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.12);
             border-radius: 15px;
             padding: 2rem;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
             max-width: 800px;
             margin: 0 auto;
         }
@@ -130,23 +150,23 @@
         }
 
         .high {
-            background: #ffe1e1;
-            color: #d63031;
+            background: rgba(214, 48, 49, 0.15);
+            color: #fc8181;
         }
 
         .moderate {
-            background: #ffecd1;
-            color: #fd9644;
+            background: rgba(253, 150, 68, 0.15);
+            color: #f6ad55;
         }
 
         .low {
-            background: #e1f5fe;
-            color: #0984e3;
+            background: rgba(9, 132, 227, 0.15);
+            color: #63b3ed;
         }
 
         .safe {
-            background: #e2f3eb;
-            color: #00b894;
+            background: rgba(0, 184, 148, 0.15);
+            color: #68d391;
         }
 
         .risk-level img {
@@ -164,14 +184,14 @@
         .location-details {
             margin-top: 2rem;
             padding: 1rem;
-            background: #f8f9fa;
+            background: rgba(255,255,255,0.06);
             border-radius: 10px;
         }
 
         .location-text {
             word-break: break-all;
             margin-top: 0.5rem;
-            color: #666;
+            color: rgba(255,255,255,0.6);
         }
 
         h2 {
@@ -179,7 +199,7 @@
         }
 
         h3 {
-            color: #2d3436;
+            color: rgba(255,255,255,0.85);
             margin-bottom: 1rem;
         }
 
@@ -202,5 +222,16 @@
             }
         }
     </style>
+
+    <button class="theme-toggle" id="theme-toggle" title="Toggle light/dark mode"><i class="fas fa-moon"></i></button>
+
+    <script>
+    (function(){
+        const btn=document.getElementById('theme-toggle'),icon=btn.querySelector('i');
+        function applyTheme(m){if(m==='light'){document.body.classList.add('light-mode');icon.classList.remove('fa-moon');icon.classList.add('fa-sun');}else{document.body.classList.remove('light-mode');icon.classList.remove('fa-sun');icon.classList.add('fa-moon');}}
+        applyTheme(localStorage.getItem('theme')||'dark');
+        btn.addEventListener('click',()=>{const l=document.body.classList.toggle('light-mode');localStorage.setItem('theme',l?'light':'dark');icon.classList.toggle('fa-moon',!l);icon.classList.toggle('fa-sun',l);});
+    })();
+    </script>
 </body>
 </html>
