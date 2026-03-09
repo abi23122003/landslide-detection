@@ -1,493 +1,439 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <title>LandSlide Detection System</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%2363b3ed'/%3E%3Cstop offset='100%25' stop-color='%232c5282'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='url(%23g)'/%3E%3Cpath d='M32 14L48 46H16Z' fill='white' stroke='white' stroke-width='2' stroke-linejoin='round'/%3E%3Cpath d='M26 46l6-10 6 10' fill='url(%23g)' stroke='url(%23g)' stroke-width='1'/%3E%3C/svg%3E">
     <style>
-        *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
-        :root{
-            --primary:#2c5282;--primary-light:#3b6db5;--secondary:#63b3ed;
-            --accent:#f6ad55;--accent-dark:#e8973d;--dark:#1a202c;
-            --light:#f7fafc;--glass:rgba(255,255,255,0.08);
-            --glass-border:rgba(255,255,255,0.15);--text-white:#fff;
-            --text-muted:rgba(255,255,255,0.7);
-        }
-        html{scroll-behavior:smooth;}
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
+        :root{--primary:#2c5282;--secondary:#63b3ed;--accent:#f6ad55;--danger:#e53e3e;--success:#48bb78;--glass:rgba(255,255,255,0.06);--glass-border:rgba(255,255,255,0.12);--text-white:#fff;--text-muted:rgba(255,255,255,0.6)}
+        html{scroll-behavior:smooth}
+        body{background:#05060b;color:var(--text-white);overflow-x:hidden}
 
-        /* ── Light mode overrides ── */
-        body.light-mode{
-            background:linear-gradient(-45deg,#ffffff,#f0f7ff,#e8f1fd,#ffffff,#f5f9ff);
-            background-size:400% 400%;animation:gradBG 18s ease infinite;
-            color:#1a202c;
-        }
-        body.light-mode .hero-card{
-            background:rgba(255,255,255,0.85);border-color:rgba(0,0,0,0.08);
-            box-shadow:0 20px 60px rgba(0,0,0,0.08),inset 0 1px 0 rgba(255,255,255,0.9);
-        }
-        body.light-mode .hero-title{color:#1a202c;}
-        body.light-mode .tagline{color:#4a5568;}
-        body.light-mode .fcard{background:rgba(255,255,255,0.7);border-color:rgba(0,0,0,0.08);}
-        body.light-mode .fcard:hover{border-color:rgba(44,82,130,0.3);box-shadow:0 16px 40px rgba(0,0,0,0.08);}
-        body.light-mode .fcard h3{color:#1a202c;}
-        body.light-mode .fcard p{color:#4a5568;}
-        body.light-mode .btn-secondary{background:rgba(44,82,130,0.06);color:#2c5282;border-color:rgba(44,82,130,0.25);}
-        body.light-mode .btn-secondary:hover{background:rgba(44,82,130,0.12);border-color:rgba(44,82,130,0.4);}
-        body.light-mode .section-title h2{color:#1a202c;}
-        body.light-mode .section-title p,body.light-mode .step p,body.light-mode .stat-label{color:#4a5568;}
-        body.light-mode .step h3{color:#1a202c;}
-        body.light-mode .trust h2{color:#1a202c;}
-        body.light-mode .badge{color:#4a5568;}
-        body.light-mode .badge i{color:#2c5282;}
-        body.light-mode footer{border-top-color:rgba(0,0,0,0.06);}
-        body.light-mode footer p{color:rgba(0,0,0,0.4);}
-        body.light-mode footer a{color:#2c5282;}
-        body.light-mode .particle{background:rgba(44,82,130,0.08);}
-        body.light-mode .text--muted-override{color:#4a5568;}
+        /* Light mode */
+        body.light-mode{background:#f8faff;color:#1a202c}
+        body.light-mode .hero-card{background:rgba(255,255,255,.85);border-color:rgba(0,0,0,.08);box-shadow:0 20px 60px rgba(0,0,0,.06)}
+        body.light-mode .hero-title{color:#1a202c}
+        body.light-mode .tagline{color:#4a5568}
+        body.light-mode .fcard{background:rgba(255,255,255,.8);border-color:rgba(0,0,0,.06)}
+        body.light-mode .fcard:hover{border-color:rgba(44,82,130,.25);box-shadow:0 16px 40px rgba(0,0,0,.06)}
+        body.light-mode .fcard h3{color:#1a202c}
+        body.light-mode .fcard p{color:#4a5568}
+        body.light-mode .btn-secondary{background:rgba(44,82,130,.06);color:#2c5282;border-color:rgba(44,82,130,.2)}
+        body.light-mode .btn-secondary:hover{background:rgba(44,82,130,.1)}
+        body.light-mode .section-title h2{color:#1a202c}
+        body.light-mode .section-title .sub{color:#4a5568}
+        body.light-mode .impact-card{background:rgba(255,255,255,.8);border-color:rgba(0,0,0,.06)}
+        body.light-mode .impact-card h3,body.light-mode .aw-card h4,body.light-mode .compare-side h4{color:#1a202c}
+        body.light-mode .impact-card p,body.light-mode .aw-card p,body.light-mode .compare-side li,body.light-mode .stat-label,body.light-mode .badge,body.light-mode .step p{color:#4a5568}
+        body.light-mode .impact-card .source{color:rgba(0,0,0,.3)}
+        body.light-mode .ticker-text{color:#4a5568}
+        body.light-mode .scenario-card,.light-mode .aw-card,.light-mode .compare-side{background:rgba(255,255,255,.8);border-color:rgba(0,0,0,.06)}
+        body.light-mode .threat-bar-bg{background:rgba(0,0,0,.06)}
+        body.light-mode .cta-section{background:rgba(44,82,130,.04)}
+        body.light-mode .cta-section h2{color:#1a202c}
+        body.light-mode .cta-section p{color:#4a5568}
+        body.light-mode .trust h2{color:#1a202c}
+        body.light-mode .trust p{color:#4a5568}
+        body.light-mode .badge i{color:#2c5282}
+        body.light-mode .step h3{color:#1a202c}
+        body.light-mode footer{border-top-color:rgba(0,0,0,.06)}
+        body.light-mode footer p{color:rgba(0,0,0,.4)}
+        body.light-mode footer a{color:#2c5282}
+        body.light-mode .particle{background:rgba(44,82,130,.06)}
 
-        /* ── Theme toggle button ── */
-        .theme-toggle{
-            position:fixed;top:24px;right:24px;z-index:200;
-            width:48px;height:48px;border-radius:50%;border:none;cursor:pointer;
-            background:rgba(255,255,255,0.08);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-            border:1px solid rgba(255,255,255,0.15);
-            color:#fff;font-size:1.2rem;display:flex;align-items:center;justify-content:center;
-            transition:all .35s ease;box-shadow:0 4px 16px rgba(0,0,0,0.15);
-        }
-        .theme-toggle:hover{transform:scale(1.1);background:rgba(255,255,255,0.18);border-color:rgba(255,255,255,0.35);box-shadow:0 0 18px rgba(99,179,237,0.3);}
-        body.light-mode .theme-toggle{
-            background:rgba(44,82,130,0.1);border-color:rgba(44,82,130,0.2);color:#2c5282;
-            box-shadow:0 4px 16px rgba(0,0,0,0.06);
-        }
-        body.light-mode .theme-toggle:hover{background:rgba(44,82,130,0.18);}
+        /* Theme toggle */
+        .theme-toggle{position:fixed;top:24px;right:24px;z-index:200;width:48px;height:48px;border-radius:50%;border:1px solid rgba(255,255,255,.12);cursor:pointer;background:rgba(255,255,255,.07);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:#fff;font-size:1.2rem;display:flex;align-items:center;justify-content:center;transition:all .35s;box-shadow:0 4px 16px rgba(0,0,0,.15)}
+        .theme-toggle:hover{transform:scale(1.1);box-shadow:0 0 18px rgba(99,179,237,.3)}
+        body.light-mode .theme-toggle{background:rgba(44,82,130,.08);border-color:rgba(44,82,130,.15);color:#2c5282}
 
-        /* ── Animated gradient bg ── */
-        body{
-            background:linear-gradient(-45deg,#000000,#0a0a10,#060612,#000000,#080810);
-            background-size:400% 400%;animation:gradBG 18s ease infinite;
-            color:var(--text-white);overflow-x:hidden;
-        }
-        @keyframes gradBG{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-
-        /* ── Particles ── */
-        .particles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
-        .particle{position:absolute;border-radius:50%;background:rgba(99,179,237,0.08);animation:floatUp linear infinite;}
+        /* Particles */
+        .particles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+        .particle{position:absolute;border-radius:50%;background:rgba(99,179,237,.06);animation:floatUp linear infinite}
         @keyframes floatUp{0%{transform:translateY(100vh) scale(0);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(-10vh) scale(1);opacity:0}}
 
-        /* ── Scroll reveal ── */
-        .reveal{opacity:0;transform:translateY(50px);transition:all 0.8s cubic-bezier(.16,1,.3,1);}
-        .reveal.visible{opacity:1;transform:translateY(0);}
+        /* Reveals */
+        .reveal{opacity:0;transform:translateY(50px);transition:all .8s cubic-bezier(.16,1,.3,1)}
+        .reveal.visible{opacity:1;transform:translateY(0)}
+        .reveal-scale{opacity:0;transform:scale(.85);transition:all .8s cubic-bezier(.16,1,.3,1)}
+        .reveal-scale.visible{opacity:1;transform:scale(1)}
 
-        /* ═══════════════════════  HERO  ═══════════════════════ */
-        .hero{
-            min-height:100vh;display:flex;align-items:center;justify-content:center;
-            position:relative;z-index:1;padding:2rem 1rem;
-        }
-        .hero-card{
-            background:var(--glass);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);
-            border:1px solid var(--glass-border);border-radius:32px;
-            padding:3.5rem 3rem 3rem;max-width:920px;width:100%;text-align:center;
-            box-shadow:0 20px 60px rgba(0,0,0,0.3),inset 0 1px 0 rgba(255,255,255,0.08);
-            animation:heroEntry 1s cubic-bezier(.16,1,.3,1) both;
-        }
+        /* HERO */
+        .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;z-index:1;padding:2rem 1rem;background:radial-gradient(ellipse at 50% 0%,rgba(44,82,130,.15) 0%,transparent 60%)}
+        .hero-card{background:var(--glass);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border:1px solid var(--glass-border);border-radius:32px;padding:3.5rem 3rem 3rem;max-width:960px;width:100%;text-align:center;box-shadow:0 20px 80px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.06);animation:heroEntry 1s cubic-bezier(.16,1,.3,1) both}
         @keyframes heroEntry{from{opacity:0;transform:translateY(50px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+        .hero-icon{width:92px;height:92px;margin:0 auto 1.5rem;background:linear-gradient(135deg,var(--secondary),var(--primary));border-radius:26px;display:flex;align-items:center;justify-content:center;box-shadow:0 12px 40px rgba(44,82,130,.5);animation:iconFloat 4s ease-in-out infinite}
+        @keyframes iconFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+        .hero-icon i{font-size:2.5rem;color:#fff}
+        .hero-title{font-size:3.4rem;font-weight:900;letter-spacing:-.8px;margin-bottom:.6rem;line-height:1.12}
+        .hero-title .grad{background:linear-gradient(135deg,var(--secondary),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .tagline{font-size:1.1rem;color:var(--text-muted);line-height:1.7;max-width:600px;margin:0 auto 2.2rem;min-height:3.3em}
+        .urgency-bar{display:flex;align-items:center;justify-content:center;gap:.6rem;padding:.6rem 1.4rem;border-radius:50px;margin-bottom:2rem;background:rgba(229,62,62,.08);border:1px solid rgba(229,62,62,.2);width:fit-content;margin-left:auto;margin-right:auto;animation:urgencyPulse 2.5s ease-in-out infinite}
+        @keyframes urgencyPulse{0%,100%{box-shadow:0 0 0 0 rgba(229,62,62,.15)}50%{box-shadow:0 0 0 10px rgba(229,62,62,0)}}
+        .urgency-dot{width:8px;height:8px;border-radius:50%;background:#e53e3e;animation:blink 1.2s infinite}
+        @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+        .urgency-text{font-size:.82rem;color:#fc8181;font-weight:600;letter-spacing:.03em}
 
-        /* logo icon */
-        .hero-icon{
-            width:88px;height:88px;margin:0 auto 1.5rem;
-            background:linear-gradient(135deg,var(--secondary),var(--primary));
-            border-radius:24px;display:flex;align-items:center;justify-content:center;
-            box-shadow:0 12px 36px rgba(44,82,130,0.45);
-            animation:iconFloat 4s ease-in-out infinite;
-        }
-        @keyframes iconFloat{0%,100%{transform:translateY(0);box-shadow:0 12px 36px rgba(44,82,130,0.45)}50%{transform:translateY(-8px);box-shadow:0 18px 44px rgba(99,179,237,0.5)}}
-        .hero-icon i{font-size:2.4rem;color:#fff;}
+        .features{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:2.5rem;text-align:left}
+        .fcard{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:1.5rem;position:relative;overflow:hidden;transition:all .4s cubic-bezier(.16,1,.3,1);cursor:default}
+        .fcard::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .4s;border-radius:16px}
+        .fcard:nth-child(1)::before{background:linear-gradient(135deg,rgba(99,179,237,.1),transparent 60%)}
+        .fcard:nth-child(2)::before{background:linear-gradient(135deg,rgba(246,173,85,.1),transparent 60%)}
+        .fcard:nth-child(3)::before{background:linear-gradient(135deg,rgba(104,211,145,.1),transparent 60%)}
+        .fcard:hover{transform:translateY(-6px);border-color:rgba(99,179,237,.3);box-shadow:0 16px 40px rgba(0,0,0,.2)}
+        .fcard:hover::before{opacity:1}
+        .fcard-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;font-size:1.25rem;transition:transform .4s}
+        .fcard:hover .fcard-icon{transform:rotateY(180deg) scale(1.1)}
+        .fcard-icon.purple{background:rgba(99,179,237,.15);color:var(--secondary)}
+        .fcard-icon.orange{background:rgba(246,173,85,.15);color:var(--accent)}
+        .fcard-icon.green{background:rgba(104,211,145,.15);color:#68d391}
+        .fcard h3{font-size:1rem;font-weight:600;margin-bottom:.35rem;color:var(--text-white)}
+        .fcard p{font-size:.82rem;color:var(--text-muted);line-height:1.55}
 
-        /* title gradient */
-        .hero-title{font-size:3.2rem;font-weight:800;letter-spacing:-.5px;margin-bottom:.6rem;line-height:1.15;}
-        .hero-title .grad{
-            background:linear-gradient(135deg,var(--secondary),var(--accent));
-            -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-            background-clip:text;
-        }
-
-        /* typing tagline */
-        .tagline{
-            font-size:1.15rem;color:var(--text-muted);line-height:1.7;
-            max-width:600px;margin:0 auto 2.5rem;min-height:3.5em;
-        }
-        
-
-        /* ── Feature cards ── */
-        .features{
-            display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;
-            margin-bottom:2.5rem;text-align:left;
-        }
-        .fcard{
-            background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);
-            border-radius:16px;padding:1.6rem;position:relative;overflow:hidden;
-            transition:all .4s cubic-bezier(.16,1,.3,1);cursor:default;
-        }
-        .fcard::before{
-            content:'';position:absolute;inset:0;
-            background:linear-gradient(135deg,rgba(99,179,237,0.12),rgba(246,173,85,0.08));
-            opacity:0;transition:opacity .4s;border-radius:16px;
-        }
-        .fcard:hover{transform:translateY(-8px);border-color:rgba(99,179,237,0.35);
-            box-shadow:0 16px 40px rgba(0,0,0,0.2);
-        }
-        .fcard:hover::before{opacity:1;}
-        .fcard-icon{
-            width:48px;height:48px;border-radius:12px;display:flex;align-items:center;
-            justify-content:center;margin-bottom:1rem;font-size:1.3rem;
-            transition:transform .4s ease;
-        }
-        .fcard:hover .fcard-icon{transform:rotateY(180deg) scale(1.1);}
-        .fcard-icon.purple{background:rgba(99,179,237,0.15);color:var(--secondary);}
-        .fcard-icon.orange{background:rgba(246,173,85,0.15);color:var(--accent);}
-        .fcard-icon.green{background:rgba(104,211,145,0.15);color:#68d391;}
-        .fcard h3{font-size:1.05rem;font-weight:600;margin-bottom:.4rem;color:var(--text-white);}
-        .fcard p{font-size:.85rem;color:var(--text-muted);line-height:1.55;}
-
-        /* ── CTA Buttons ── */
-        .cta{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
-        .btn{
-            padding:1rem 2.4rem;border-radius:14px;font-size:1.05rem;font-weight:600;
-            cursor:pointer;display:inline-flex;align-items:center;gap:.55rem;
-            text-decoration:none;position:relative;overflow:hidden;
-            transition:all .35s ease;border:none;
-        }
-        .btn .ripple{
-            position:absolute;border-radius:50%;background:rgba(255,255,255,0.35);
-            transform:scale(0);animation:rippleAnim .6s ease-out;pointer-events:none;
-        }
+        .cta{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+        .btn{padding:1rem 2.4rem;border-radius:14px;font-size:1.05rem;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:.55rem;text-decoration:none;position:relative;overflow:hidden;transition:all .35s;border:none}
+        .btn .ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.3);transform:scale(0);animation:rippleAnim .6s ease-out;pointer-events:none}
         @keyframes rippleAnim{to{transform:scale(4);opacity:0}}
-        .btn-primary{
-            background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;
-        }
-        .btn-primary:hover{
-            transform:translateY(-3px);box-shadow:0 12px 32px rgba(99,179,237,0.35);
-        }
-        .btn-secondary{
-            background:rgba(255,255,255,0.08);color:#fff;
-            border:1.5px solid rgba(255,255,255,0.25);backdrop-filter:blur(8px);
-        }
-        .btn-secondary:hover{
-            background:rgba(255,255,255,0.18);transform:translateY(-3px);
-            border-color:rgba(255,255,255,0.4);
-        }
-        .btn:active{transform:translateY(0) scale(.97);}
+        .btn-primary{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff}
+        .btn-primary:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(99,179,237,.35)}
+        .btn-secondary{background:rgba(255,255,255,.06);color:#fff;border:1.5px solid rgba(255,255,255,.2);backdrop-filter:blur(8px)}
+        .btn-secondary:hover{background:rgba(255,255,255,.14);transform:translateY(-3px)}
+        .btn:active{transform:translateY(0) scale(.97)}
+        .btn-danger{background:linear-gradient(135deg,#e53e3e,#fc8181);color:#fff}
+        .btn-danger:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(229,62,62,.35)}
 
-        /* ═══════════════════  HOW IT WORKS  ═══════════════════ */
-        .section{padding:5rem 1.5rem;position:relative;z-index:1;}
-        .section-title{text-align:center;margin-bottom:3rem;}
-        .section-title h2{font-size:2.2rem;font-weight:700;margin-bottom:.5rem;}
-        .section-title p{color:var(--text-muted);font-size:1rem;}
+        .scroll-cue{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.4rem;animation:bounceCue 2s ease infinite;color:var(--text-muted);font-size:.75rem}
+        @keyframes bounceCue{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(8px)}}
+        .scroll-cue .mouse{width:24px;height:38px;border:2px solid rgba(255,255,255,.25);border-radius:12px;position:relative}
+        .scroll-cue .mouse::after{content:'';width:4px;height:8px;background:var(--secondary);border-radius:2px;position:absolute;top:6px;left:50%;transform:translateX(-50%);animation:scrollWheel 1.5s ease infinite}
+        @keyframes scrollWheel{0%{opacity:1;transform:translateX(-50%) translateY(0)}100%{opacity:0;transform:translateX(-50%) translateY(12px)}}
 
-        .steps{
-            display:flex;justify-content:center;align-items:flex-start;gap:0;
-            max-width:850px;margin:0 auto;position:relative;
-        }
-        .step{text-align:center;flex:1;position:relative;padding:0 1rem;}
-        .step-num{
-            width:64px;height:64px;margin:0 auto 1.2rem;
-            background:linear-gradient(135deg,var(--primary),var(--secondary));
-            border-radius:50%;display:flex;align-items:center;justify-content:center;
-            font-size:1.5rem;font-weight:700;color:#fff;position:relative;z-index:2;
-            box-shadow:0 8px 24px rgba(44,82,130,0.4);
-            transition:all .4s ease;
-        }
-        .step:hover .step-num{
-            transform:scale(1.12);box-shadow:0 12px 32px rgba(99,179,237,0.5);
-        }
-        .step-icon{font-size:2rem;margin-bottom:.8rem;color:var(--accent);}
-        .step h3{font-size:1.05rem;font-weight:600;margin-bottom:.4rem;}
-        .step p{font-size:.85rem;color:var(--text-muted);line-height:1.5;}
+        /* SECTIONS */
+        .section{padding:6rem 1.5rem;position:relative;z-index:1;max-width:1100px;margin:0 auto}
+        .section-title{text-align:center;margin-bottom:3.5rem}
+        .section-title h2{font-size:2.4rem;font-weight:800;margin-bottom:.5rem;letter-spacing:-.3px}
+        .section-title .sub{color:var(--text-muted);font-size:1rem;max-width:550px;margin:0 auto;line-height:1.6}
+        .section-title .label{display:inline-flex;align-items:center;gap:.4rem;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.4rem 1rem;border-radius:50px;margin-bottom:.8rem}
+        .label-red{background:rgba(229,62,62,.1);color:#fc8181;border:1px solid rgba(229,62,62,.2)}
+        .label-blue{background:rgba(99,179,237,.1);color:#63b3ed;border:1px solid rgba(99,179,237,.2)}
+        .label-green{background:rgba(72,187,120,.1);color:#68d391;border:1px solid rgba(72,187,120,.2)}
+        .label-orange{background:rgba(246,173,85,.1);color:#f6ad55;border:1px solid rgba(246,173,85,.2)}
 
-        /* connector line */
-        .step-connector{
-            position:absolute;top:32px;left:calc(50% + 40px);
-            width:calc(100% - 80px);height:3px;z-index:1;
-        }
-        .step-connector .line{
-            height:100%;background:linear-gradient(90deg,var(--secondary),var(--accent));
-            border-radius:3px;width:0;transition:width 1.2s ease;
-        }
-        .step-connector.animated .line{width:100%;}
+        /* Impact cards */
+        .impact-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem}
+        .impact-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:2rem;transition:all .4s}
+        .impact-card:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.15);box-shadow:0 12px 40px rgba(0,0,0,.2)}
+        .impact-card .ic-icon{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:1.2rem}
+        .ic-icon.red{background:rgba(229,62,62,.12);color:#fc8181}
+        .ic-icon.orange{background:rgba(246,173,85,.12);color:#f6ad55}
+        .ic-icon.blue{background:rgba(99,179,237,.12);color:#63b3ed}
+        .ic-icon.green{background:rgba(72,187,120,.12);color:#68d391}
+        .impact-card h3{font-size:1.15rem;font-weight:700;margin-bottom:.4rem}
+        .impact-card .big-num{font-size:2.8rem;font-weight:900;margin-bottom:.3rem;line-height:1;background:linear-gradient(135deg,var(--secondary),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .impact-card.danger .big-num{background:linear-gradient(135deg,#e53e3e,#fc8181);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .impact-card p{font-size:.88rem;color:var(--text-muted);line-height:1.6}
+        .impact-card .source{font-size:.7rem;color:rgba(255,255,255,.25);margin-top:.6rem;font-style:italic}
 
-        /* ═══════════════════  STATS  ═══════════════════ */
-        .stats{
-            display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;
-            max-width:750px;margin:0 auto;
-        }
-        .stat{text-align:center;}
-        .stat-num{
-            font-size:3rem;font-weight:800;
-            background:linear-gradient(135deg,var(--secondary),var(--accent));
-            -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-            background-clip:text;
-        }
-        .stat-label{color:var(--text-muted);font-size:.9rem;margin-top:.3rem;font-weight:500;}
+        /* Live threat ticker */
+        .threat-ticker{background:rgba(229,62,62,.05);border:1px solid rgba(229,62,62,.12);border-radius:16px;padding:1.5rem 2rem;margin-top:2rem;display:flex;align-items:center;gap:1.5rem;overflow:hidden}
+        .pulse-ring{width:48px;height:48px;border-radius:50%;flex-shrink:0;background:rgba(229,62,62,.15);display:flex;align-items:center;justify-content:center;position:relative}
+        .pulse-ring::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:2px solid rgba(229,62,62,.3);animation:pulseRing 2s ease infinite}
+        @keyframes pulseRing{0%{transform:scale(1);opacity:1}100%{transform:scale(1.6);opacity:0}}
+        .pulse-ring i{color:#fc8181;font-size:1.2rem}
+        .ticker-content{flex:1;overflow:hidden}
+        .ticker-text{font-size:.85rem;color:rgba(255,255,255,.7);white-space:nowrap;animation:tickerScroll 25s linear infinite}
+        @keyframes tickerScroll{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}
 
-        /* ═══════════════════  TRUST  ═══════════════════ */
-        .trust{
-            text-align:center;padding:3.5rem 1rem;position:relative;z-index:1;
-        }
-        .trust-badges{
-            display:flex;justify-content:center;gap:2.5rem;flex-wrap:wrap;
-            margin-top:1.5rem;
-        }
-        .badge{
-            display:flex;align-items:center;gap:.6rem;
-            color:var(--text-muted);font-size:.92rem;font-weight:500;
-        }
-        .badge i{font-size:1.3rem;color:var(--secondary);}
+        /* Awareness cards */
+        .awareness-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
+        .aw-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:1.8rem;text-align:center;transition:all .4s cubic-bezier(.16,1,.3,1)}
+        .aw-card:hover{transform:translateY(-6px);border-color:rgba(99,179,237,.25);box-shadow:0 14px 40px rgba(0,0,0,.15)}
+        .aw-card .aw-emoji{font-size:2.8rem;margin-bottom:1rem;display:block}
+        .aw-card h4{font-size:1rem;font-weight:700;margin-bottom:.4rem;color:var(--text-white)}
+        .aw-card p{font-size:.82rem;color:var(--text-muted);line-height:1.55}
+        .threat-bar{margin-top:.8rem}
+        .threat-bar-bg{height:6px;border-radius:3px;background:rgba(255,255,255,.06);overflow:hidden}
+        .threat-bar-fill{height:100%;border-radius:3px;transition:width 1.5s ease}
+        .threat-bar-label{display:flex;justify-content:space-between;margin-top:4px;font-size:.65rem;color:var(--text-muted)}
 
-        /* ═══════════════════  FOOTER  ═══════════════════ */
-        footer{
-            text-align:center;padding:2rem 1rem;position:relative;z-index:1;
-            border-top:1px solid rgba(255,255,255,0.06);
-        }
-        footer p{color:rgba(255,255,255,0.35);font-size:.82rem;}
-        footer a{color:var(--secondary);text-decoration:none;}
-        footer a:hover{color:var(--accent);}
+        /* Compare */
+        .compare{display:grid;grid-template-columns:1fr auto 1fr;gap:0;align-items:stretch}
+        .compare-side{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:2rem;transition:all .4s}
+        .compare-side:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.15)}
+        .compare-side.without{border-color:rgba(229,62,62,.2)}
+        .compare-side.with{border-color:rgba(72,187,120,.2)}
+        .compare-side h4{font-size:1.1rem;font-weight:700;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
+        .compare-side.without h4{color:#fc8181}
+        .compare-side.with h4{color:#68d391}
+        .compare-side ul{list-style:none;padding:0}
+        .compare-side li{padding:.55rem 0;font-size:.88rem;color:var(--text-muted);display:flex;align-items:flex-start;gap:.6rem;line-height:1.45}
+        .compare-side.without li i{color:#e53e3e;margin-top:3px;flex-shrink:0}
+        .compare-side.with li i{color:#48bb78;margin-top:3px;flex-shrink:0}
+        .compare-vs{display:flex;align-items:center;justify-content:center;padding:0 1.2rem}
+        .vs-badge{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--secondary));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.9rem;color:#fff;box-shadow:0 6px 20px rgba(44,82,130,.4)}
 
-        /* ── Responsive ── */
+        /* Steps */
+        .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;max-width:900px;margin:0 auto;position:relative}
+        .step{text-align:center;position:relative;padding:0 .8rem}
+        .step-num{width:68px;height:68px;margin:0 auto 1.2rem;background:linear-gradient(135deg,var(--primary),var(--secondary));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:800;color:#fff;position:relative;z-index:2;box-shadow:0 8px 28px rgba(44,82,130,.4);transition:all .4s}
+        .step:hover .step-num{transform:scale(1.15);box-shadow:0 12px 36px rgba(99,179,237,.5)}
+        .step-icon{font-size:1.8rem;margin-bottom:.7rem;color:var(--accent)}
+        .step h3{font-size:1rem;font-weight:600;margin-bottom:.35rem}
+        .step p{font-size:.82rem;color:var(--text-muted);line-height:1.5}
+        .step-connector{position:absolute;top:34px;left:calc(50% + 42px);width:calc(100% - 84px);height:3px;z-index:1}
+        .step-connector .line{height:100%;background:linear-gradient(90deg,var(--secondary),var(--accent));border-radius:3px;width:0;transition:width 1.2s ease}
+        .step-connector.animated .line{width:100%}
+
+        /* Stats */
+        .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;max-width:850px;margin:0 auto}
+        .stat{text-align:center}
+        .stat-num{font-size:2.8rem;font-weight:900;background:linear-gradient(135deg,var(--secondary),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .stat-label{color:var(--text-muted);font-size:.85rem;margin-top:.3rem;font-weight:500}
+
+        /* Final CTA */
+        .cta-section{text-align:center;padding:4rem 2rem;margin-top:2rem;background:rgba(44,82,130,.06);border-radius:32px;border:1px solid rgba(99,179,237,.1);position:relative;overflow:hidden}
+        .cta-section::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(99,179,237,.1) 0%,transparent 60%);pointer-events:none}
+        .cta-section h2{font-size:2.2rem;font-weight:800;margin-bottom:.6rem}
+        .cta-section p{color:var(--text-muted);margin-bottom:2rem;font-size:1.05rem}
+
+        /* Trust */
+        .trust{text-align:center;padding:3rem 1rem;position:relative;z-index:1}
+        .trust-badges{display:flex;justify-content:center;gap:2.5rem;flex-wrap:wrap;margin-top:1.5rem}
+        .badge{display:flex;align-items:center;gap:.6rem;color:var(--text-muted);font-size:.9rem;font-weight:500}
+        .badge i{font-size:1.3rem;color:var(--secondary)}
+
+        /* Footer */
+        footer{text-align:center;padding:2rem 1rem;position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.06)}
+        footer p{color:rgba(255,255,255,.3);font-size:.82rem}
+        footer a{color:var(--secondary);text-decoration:none}
+        footer a:hover{color:var(--accent)}
+
         @media(max-width:768px){
-            .hero-card{padding:2.5rem 1.5rem;}
-            .hero-title{font-size:2.2rem;}
-            .features{grid-template-columns:1fr;}
-            .steps{flex-direction:column;gap:2rem;}
-            .step-connector{display:none;}
-            .stats{grid-template-columns:1fr;gap:1.5rem;}
-            .cta{flex-direction:column;}
-            .btn{width:100%;justify-content:center;}
+            .hero-card{padding:2rem 1.2rem;border-radius:22px}
+            .hero-title{font-size:2.2rem}
+            .features,.awareness-grid{grid-template-columns:1fr}
+            .impact-grid{grid-template-columns:1fr}
+            .compare{grid-template-columns:1fr;gap:1rem}
+            .compare-vs{padding:.5rem 0}
+            .steps{grid-template-columns:1fr 1fr;gap:1.5rem}
+            .step-connector{display:none}
+            .stats{grid-template-columns:1fr 1fr;gap:1.5rem}
+            .cta{flex-direction:column}
+            .btn{width:100%;justify-content:center}
+            .section{padding:4rem 1rem}
         }
-        @media(max-width:480px){
-            .hero-title{font-size:1.8rem;}
-            .hero-card{padding:2rem 1.2rem;border-radius:22px;}
-        }
+        @media(max-width:480px){.hero-title{font-size:1.8rem}.steps,.stats{grid-template-columns:1fr}}
     </style>
 </head>
 <body>
-    <!-- Particles -->
     <div class="particles" id="particles"></div>
+    <button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fas fa-moon" id="themeIcon"></i></button>
 
-    <!-- Theme toggle -->
-    <button class="theme-toggle" id="themeToggle" title="Toggle dark / light mode">
-        <i class="fas fa-moon" id="themeIcon"></i>
-    </button>
-
-    <!-- ═══════════════  HERO SECTION  ═══════════════ -->
+    <!-- HERO -->
     <section class="hero">
         <div class="hero-card">
-            <div class="hero-icon">
-                <i class="fas fa-mountain"></i>
-            </div>
-
-            <h1 class="hero-title">
-                <span class="grad">LandSlide</span> Detection System
-            </h1>
-
+            <div class="hero-icon"><i class="fas fa-mountain"></i></div>
+            <div class="urgency-bar"><span class="urgency-dot"></span><span class="urgency-text">ACTIVE MONITORING — REAL-TIME RISK ANALYSIS</span></div>
+            <h1 class="hero-title"><span class="grad">LandSlide</span> Detection System</h1>
             <p class="tagline" id="tagline"></p>
-
-            <!-- Feature cards -->
             <div class="features">
                 <div class="fcard reveal">
                     <div class="fcard-icon purple"><i class="fas fa-brain"></i></div>
                     <h3>AI Prediction</h3>
-                    <p>Machine learning algorithms analyze geological data for accurate risk assessment</p>
+                    <p>Machine learning analyzes geological data for accurate risk assessment</p>
                 </div>
                 <div class="fcard reveal">
                     <div class="fcard-icon orange"><i class="fas fa-chart-line"></i></div>
                     <h3>Real-time Analysis</h3>
-                    <p>Instant risk evaluation based on slope, rainfall, and moisture content</p>
+                    <p>Instant risk evaluation based on slope, rainfall, and moisture</p>
                 </div>
                 <div class="fcard reveal">
                     <div class="fcard-icon green"><i class="fas fa-shield-halved"></i></div>
-                    <h3>Safety First</h3>
-                    <p>Early warning system to prevent disasters and save lives</p>
+                    <h3>Save Lives</h3>
+                    <p>Early warnings give communities time to evacuate safely</p>
                 </div>
             </div>
-
-            <!-- CTA -->
             <div class="cta">
-                <a href="/login" class="btn btn-primary" onclick="createRipple(event)">
-                    <i class="fas fa-sign-in-alt"></i> Login
-                </a>
-                <a href="/register" class="btn btn-secondary" onclick="createRipple(event)">
-                    <i class="fas fa-user-plus"></i> Register
-                </a>
+                <a href="/login" class="btn btn-primary" onclick="createRipple(event)"><i class="fas fa-sign-in-alt"></i> Get Started — Login</a>
+                <a href="/register" class="btn btn-secondary" onclick="createRipple(event)"><i class="fas fa-user-plus"></i> Create Account</a>
+            </div>
+        </div>
+        <div class="scroll-cue"><div class="mouse"></div><span>Scroll to learn why</span></div>
+    </section>
+
+    <!-- WHY IT MATTERS -->
+    <section class="section">
+        <div class="section-title reveal">
+            <span class="label label-red"><i class="fas fa-exclamation-triangle"></i> Critical Issue</span>
+            <h2>Why Landslide Detection Matters</h2>
+            <p class="sub">Landslides kill thousands and destroy billions in infrastructure every year. Most deaths happen because people had <strong>no warning</strong>.</p>
+        </div>
+        <div class="impact-grid">
+            <div class="impact-card danger reveal">
+                <div class="ic-icon red"><i class="fas fa-skull-crossbones"></i></div>
+                <div class="big-num" data-target="4600" data-suffix="+">0</div>
+                <h3>Lives Lost Per Year</h3>
+                <p>Globally, an average of 4,600+ people die from landslides annually — most in regions with zero early warning.</p>
+                <div class="source">Source: Global Landslide Catalog, NASA</div>
+            </div>
+            <div class="impact-card danger reveal">
+                <div class="ic-icon orange"><i class="fas fa-dollar-sign"></i></div>
+                <div class="big-num" data-target="20" data-suffix="B$">0</div>
+                <h3>Economic Damage Yearly</h3>
+                <p>Roads, homes, bridges, farmland — landslides cause over $20 billion in damages worldwide each year.</p>
+                <div class="source">Source: World Bank Disaster Risk Report</div>
+            </div>
+            <div class="impact-card reveal">
+                <div class="ic-icon blue"><i class="fas fa-cloud-showers-heavy"></i></div>
+                <div class="big-num" data-target="90" data-suffix="%">0</div>
+                <h3>Triggered by Rain</h3>
+                <p>9 out of 10 landslides are triggered by heavy rainfall saturating the soil. Predicting rain + slope = predicting disaster.</p>
+                <div class="source">Source: USGS Landslide Hazards Program</div>
+            </div>
+            <div class="impact-card reveal">
+                <div class="ic-icon green"><i class="fas fa-hourglass-half"></i></div>
+                <div class="big-num" data-target="72" data-suffix="hrs">0</div>
+                <h3>Early Warning Window</h3>
+                <p>With proper data, landslides can be predicted up to 72 hours in advance — enough time to save entire communities.</p>
+                <div class="source">Source: International Consortium on Landslides</div>
+            </div>
+        </div>
+        <div class="threat-ticker reveal">
+            <div class="pulse-ring"><i class="fas fa-satellite-dish"></i></div>
+            <div class="ticker-content">
+                <div class="ticker-text">&#9888;&#65039; India: 2,000+ landslide events per year &nbsp;&nbsp;|&nbsp;&nbsp; Brazil: Flash mudslides displace 10,000s &nbsp;&nbsp;|&nbsp;&nbsp; Nepal: Monsoon season triggers 300+ slides &nbsp;&nbsp;|&nbsp;&nbsp; Philippines: Typhoons cause catastrophic slope failures &nbsp;&nbsp;|&nbsp;&nbsp; USA: $3.5B annual landslide damage &nbsp;&nbsp;|&nbsp;&nbsp; Climate change is increasing landslide frequency by 10% per decade</div>
             </div>
         </div>
     </section>
 
-    <!-- ═══════════════  HOW IT WORKS  ═══════════════ -->
+    <!-- WHAT CAUSES LANDSLIDES -->
     <section class="section">
         <div class="section-title reveal">
+            <span class="label label-orange"><i class="fas fa-search"></i> Understanding Risk</span>
+            <h2>What Causes Landslides?</h2>
+            <p class="sub">Our system monitors the three most critical factors. Here is why each one matters.</p>
+        </div>
+        <div class="awareness-grid">
+            <div class="aw-card reveal">
+                <span class="aw-emoji">&#9968;&#65039;</span>
+                <h4>Steep Slopes</h4>
+                <p>Gravity constantly pulls on hillside material. The steeper the slope, the less force it takes to trigger a collapse. Slopes above 30 degrees are high risk.</p>
+                <div class="threat-bar"><div class="threat-bar-bg"><div class="threat-bar-fill" data-width="85" style="width:0;background:linear-gradient(90deg,#ed8936,#e53e3e)"></div></div><div class="threat-bar-label"><span>Low angle</span><span>Very steep</span></div></div>
+            </div>
+            <div class="aw-card reveal">
+                <span class="aw-emoji">&#127783;&#65039;</span>
+                <h4>Heavy Rainfall</h4>
+                <p>Water seeps into cracks, adds weight, and creates pore pressure that pushes soil particles apart. Prolonged rain is the #1 trigger worldwide.</p>
+                <div class="threat-bar"><div class="threat-bar-bg"><div class="threat-bar-fill" data-width="92" style="width:0;background:linear-gradient(90deg,#63b3ed,#e53e3e)"></div></div><div class="threat-bar-label"><span>Light rain</span><span>Extreme</span></div></div>
+            </div>
+            <div class="aw-card reveal">
+                <span class="aw-emoji">&#128167;</span>
+                <h4>Soil Moisture</h4>
+                <p>Saturated soil becomes heavy and loses cohesion — it literally turns into flowing mud. Moisture above 60% makes slopes dangerously unstable.</p>
+                <div class="threat-bar"><div class="threat-bar-bg"><div class="threat-bar-fill" data-width="78" style="width:0;background:linear-gradient(90deg,#48bb78,#e53e3e)"></div></div><div class="threat-bar-label"><span>Dry soil</span><span>Saturated</span></div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WITHOUT vs WITH -->
+    <section class="section">
+        <div class="section-title reveal">
+            <span class="label label-green"><i class="fas fa-balance-scale"></i> The Difference</span>
+            <h2>Without vs With Early Warning</h2>
+            <p class="sub">See the life-saving difference that a detection system makes.</p>
+        </div>
+        <div class="compare reveal-scale">
+            <div class="compare-side without">
+                <h4><i class="fas fa-times-circle"></i> Without Detection</h4>
+                <ul>
+                    <li><i class="fas fa-times"></i> No warning before disaster strikes</li>
+                    <li><i class="fas fa-times"></i> Families buried under rubble</li>
+                    <li><i class="fas fa-times"></i> Roads and bridges destroyed with no preparation</li>
+                    <li><i class="fas fa-times"></i> Emergency services arrive too late</li>
+                    <li><i class="fas fa-times"></i> Billions in uninsured damage</li>
+                    <li><i class="fas fa-times"></i> Communities displaced permanently</li>
+                </ul>
+            </div>
+            <div class="compare-vs"><div class="vs-badge">VS</div></div>
+            <div class="compare-side with">
+                <h4><i class="fas fa-check-circle"></i> With Our System</h4>
+                <ul>
+                    <li><i class="fas fa-check"></i> 72-hour advance risk prediction</li>
+                    <li><i class="fas fa-check"></i> Timely evacuation saves all lives</li>
+                    <li><i class="fas fa-check"></i> Infrastructure can be reinforced</li>
+                    <li><i class="fas fa-check"></i> Emergency teams pre-positioned</li>
+                    <li><i class="fas fa-check"></i> Insurance and resources mobilized early</li>
+                    <li><i class="fas fa-check"></i> Communities stay safe and informed</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="section">
+        <div class="section-title reveal">
+            <span class="label label-blue"><i class="fas fa-cogs"></i> Simple Process</span>
             <h2>How It Works</h2>
-            <p>Three simple steps to assess landslide risk in your area</p>
+            <p class="sub">Four easy steps to assess landslide risk in any location</p>
         </div>
-
         <div class="steps">
-            <div class="step reveal">
-                <div class="step-num">1</div>
-                <div class="step-icon"><i class="fas fa-keyboard"></i></div>
-                <h3>Enter Data</h3>
-                <p>Input slope angle, rainfall, and moisture content for your location</p>
-                <div class="step-connector"><div class="line"></div></div>
-            </div>
-            <div class="step reveal">
-                <div class="step-num">2</div>
-                <div class="step-icon"><i class="fas fa-microchip"></i></div>
-                <h3>AI Analyzes</h3>
-                <p>Our machine learning model processes the data in real-time</p>
-                <div class="step-connector"><div class="line"></div></div>
-            </div>
-            <div class="step reveal">
-                <div class="step-num">3</div>
-                <div class="step-icon"><i class="fas fa-chart-pie"></i></div>
-                <h3>Get Results</h3>
-                <p>Receive a detailed risk assessment with confidence graph</p>
-            </div>
+            <div class="step reveal"><div class="step-num">1</div><div class="step-icon"><i class="fas fa-user-plus"></i></div><h3>Create Account</h3><p>Register in seconds with your email</p><div class="step-connector"><div class="line"></div></div></div>
+            <div class="step reveal"><div class="step-num">2</div><div class="step-icon"><i class="fas fa-sliders-h"></i></div><h3>Enter Parameters</h3><p>Input slope, rainfall, and soil moisture</p><div class="step-connector"><div class="line"></div></div></div>
+            <div class="step reveal"><div class="step-num">3</div><div class="step-icon"><i class="fas fa-microchip"></i></div><h3>AI Analyzes</h3><p>ML model processes data in milliseconds</p><div class="step-connector"><div class="line"></div></div></div>
+            <div class="step reveal"><div class="step-num">4</div><div class="step-icon"><i class="fas fa-chart-pie"></i></div><h3>Get Risk Report</h3><p>Detailed assessment with confidence levels</p></div>
         </div>
     </section>
 
-    <!-- ═══════════════  STATS  ═══════════════ -->
+    <!-- STATS -->
     <section class="section">
-        <div class="section-title reveal">
-            <h2>By the Numbers</h2>
-            <p>Trusted performance metrics</p>
-        </div>
+        <div class="section-title reveal"><h2>By the Numbers</h2><p class="sub">Trusted performance metrics from our platform</p></div>
         <div class="stats">
-            <div class="stat reveal">
-                <div class="stat-num" data-target="98.5" data-suffix="%">0</div>
-                <div class="stat-label">Prediction Accuracy</div>
-            </div>
-            <div class="stat reveal">
-                <div class="stat-num" data-target="500" data-suffix="+">0</div>
-                <div class="stat-label">Risk Assessments</div>
-            </div>
-            <div class="stat reveal">
-                <div class="stat-num" data-target="24" data-suffix="/7">0</div>
-                <div class="stat-label">Real-time Monitoring</div>
+            <div class="stat reveal"><div class="stat-num" data-target="98.5" data-suffix="%">0</div><div class="stat-label">Prediction Accuracy</div></div>
+            <div class="stat reveal"><div class="stat-num" data-target="500" data-suffix="+">0</div><div class="stat-label">Risk Assessments</div></div>
+            <div class="stat reveal"><div class="stat-num" data-target="24" data-suffix="/7">0</div><div class="stat-label">Real-time Monitoring</div></div>
+            <div class="stat reveal"><div class="stat-num" data-target="150" data-suffix="ms">0</div><div class="stat-label">Analysis Speed</div></div>
+        </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="section">
+        <div class="cta-section reveal-scale">
+            <h2>Do Not Wait for Disaster</h2>
+            <p>Every minute without monitoring is a risk. Start predicting landslide hazards today — it is free.</p>
+            <div class="cta">
+                <a href="/register" class="btn btn-danger" onclick="createRipple(event)"><i class="fas fa-bolt"></i> Start Predicting Now</a>
+                <a href="/login" class="btn btn-secondary" onclick="createRipple(event)"><i class="fas fa-sign-in-alt"></i> Already have an account?</a>
             </div>
         </div>
     </section>
 
-    <!-- ═══════════════  TRUST  ═══════════════ -->
+    <!-- TRUST -->
     <section class="trust reveal">
         <h2>Trusted Worldwide</h2>
-        <p style="color:var(--text-muted);margin-top:.5rem;">Used by researchers, geologists, and disaster management teams</p>
+        <p style="color:var(--text-muted);margin-top:.5rem">Used by researchers, geologists, and disaster management teams</p>
         <div class="trust-badges">
             <div class="badge"><i class="fas fa-lock"></i> Secure Platform</div>
             <div class="badge"><i class="fas fa-bolt"></i> Instant Results</div>
             <div class="badge"><i class="fas fa-globe-americas"></i> Global Coverage</div>
             <div class="badge"><i class="fas fa-award"></i> Research Grade</div>
+            <div class="badge"><i class="fas fa-code-branch"></i> Open Analysis</div>
         </div>
     </section>
 
-    <!-- ═══════════════  FOOTER  ═══════════════ -->
-    <footer>
-        <p>&copy; 2026 <a href="/">LandSlideGuard</a>. Built for safety. Powered by AI.</p>
-    </footer>
+    <footer><p>&copy; 2026 <a href="/">LandSlideGuard</a>. Built for safety. Powered by AI.</p></footer>
 
     <script>
-    /* ── Particles ── */
-    (function(){
-        const c=document.getElementById('particles');
-        for(let i=0;i<35;i++){
-            const p=document.createElement('div');p.classList.add('particle');
-            const s=Math.random()*7+2;
-            p.style.width=s+'px';p.style.height=s+'px';
-            p.style.left=Math.random()*100+'%';
-            p.style.animationDuration=(Math.random()*14+8)+'s';
-            p.style.animationDelay=(Math.random()*12)+'s';
-            c.appendChild(p);
-        }
-    })();
-
-    /* ── Typing effect ── */
-    (function(){
-        const text="Advanced AI-powered landslide risk assessment and prediction system. Protect lives and infrastructure with real-time geological analysis.";
-        const el=document.getElementById('tagline');
-        let i=0;
-        function type(){
-            if(i<text.length){
-                el.textContent+=text.charAt(i);
-                i++;
-                setTimeout(type,28);
-            }
-        }
-        setTimeout(type,600);
-    })();
-
-    /* ── Scroll reveal ── */
-    const observer=new IntersectionObserver((entries)=>{
-        entries.forEach(e=>{
-            if(e.isIntersecting){
-                e.target.classList.add('visible');
-                // animate step connectors
-                const conn=e.target.querySelector('.step-connector');
-                if(conn) setTimeout(()=>conn.classList.add('animated'),300);
-            }
-        });
-    },{threshold:0.15,rootMargin:'0px 0px -40px 0px'});
-    document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
-
-    /* ── Counter animation ── */
-    const counterObs=new IntersectionObserver((entries)=>{
-        entries.forEach(e=>{
-            if(e.isIntersecting&&!e.target.dataset.counted){
-                e.target.dataset.counted='true';
-                const target=parseFloat(e.target.dataset.target);
-                const suffix=e.target.dataset.suffix||'';
-                const isFloat=target%1!==0;
-                const duration=2000;const steps=60;
-                let current=0;const increment=target/steps;
-                const timer=setInterval(()=>{
-                    current+=increment;
-                    if(current>=target){current=target;clearInterval(timer);}
-                    e.target.textContent=(isFloat?current.toFixed(1):Math.floor(current))+suffix;
-                },duration/steps);
-            }
-        });
-    },{threshold:0.5});
-    document.querySelectorAll('.stat-num').forEach(el=>counterObs.observe(el));
-
-    /* ── Ripple effect ── */
-    function createRipple(e){
-        const btn=e.currentTarget;
-        const circle=document.createElement('span');
-        const d=Math.max(btn.clientWidth,btn.clientHeight);
-        const rect=btn.getBoundingClientRect();
-        circle.style.width=circle.style.height=d+'px';
-        circle.style.left=(e.clientX-rect.left-d/2)+'px';
-        circle.style.top=(e.clientY-rect.top-d/2)+'px';
-        circle.classList.add('ripple');
-        const old=btn.querySelector('.ripple');
-        if(old)old.remove();
-        btn.appendChild(circle);
-    }
-
-    /* ── Theme toggle ── */
-    (function(){
-        const btn=document.getElementById('themeToggle'),icon=document.getElementById('themeIcon');
-        function applyTheme(dark){
-            document.body.classList.toggle('light-mode',!dark);
-            icon.classList.toggle('fa-moon',dark);
-            icon.classList.toggle('fa-sun',!dark);
-        }
-        applyTheme((localStorage.getItem('theme')||'dark')==='dark');
-        btn.addEventListener('click',()=>{
-            const dark=document.body.classList.contains('light-mode');
-            localStorage.setItem('theme',dark?'dark':'light');
-            applyTheme(dark);
-        });
-    })();
+    (function(){var c=document.getElementById('particles');for(var i=0;i<40;i++){var p=document.createElement('div');p.classList.add('particle');var s=Math.random()*7+2;p.style.width=s+'px';p.style.height=s+'px';p.style.left=Math.random()*100+'%';p.style.animationDuration=(Math.random()*16+8)+'s';p.style.animationDelay=(Math.random()*14)+'s';c.appendChild(p)}})();
+    (function(){var text="Advanced AI-powered landslide risk assessment and prediction system. Protect lives and infrastructure with real-time geological analysis.";var el=document.getElementById('tagline');var i=0;function type(){if(i<text.length){el.textContent+=text.charAt(i);i++;setTimeout(type,22)}}setTimeout(type,500)})();
+    var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');var conn=e.target.querySelector('.step-connector');if(conn)setTimeout(function(){conn.classList.add('animated')},300);e.target.querySelectorAll('.threat-bar-fill').forEach(function(bar){setTimeout(function(){bar.style.width=bar.dataset.width+'%'},400)})}})},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+    document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.reveal-scale').forEach(function(el){obs.observe(el)});
+    var counterObs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting&&!e.target.dataset.counted){e.target.dataset.counted='true';var target=parseFloat(e.target.dataset.target);var suffix=e.target.dataset.suffix||'';var isFloat=target%1!==0;var duration=2000;var steps=60;var current=0;var inc=target/steps;var timer=setInterval(function(){current+=inc;if(current>=target){current=target;clearInterval(timer)}e.target.textContent=(isFloat?current.toFixed(1):Math.floor(current))+suffix},duration/steps)}})},{threshold:0.5});
+    document.querySelectorAll('.stat-num,.big-num').forEach(function(el){counterObs.observe(el)});
+    function createRipple(e){var btn=e.currentTarget;var circle=document.createElement('span');var d=Math.max(btn.clientWidth,btn.clientHeight);var rect=btn.getBoundingClientRect();circle.style.width=circle.style.height=d+'px';circle.style.left=(e.clientX-rect.left-d/2)+'px';circle.style.top=(e.clientY-rect.top-d/2)+'px';circle.classList.add('ripple');var old=btn.querySelector('.ripple');if(old)old.remove();btn.appendChild(circle)}
+    (function(){var btn=document.getElementById('themeToggle'),icon=document.getElementById('themeIcon');function applyTheme(dark){document.body.classList.toggle('light-mode',!dark);icon.classList.toggle('fa-moon',dark);icon.classList.toggle('fa-sun',!dark)}applyTheme((localStorage.getItem('theme')||'dark')==='dark');btn.addEventListener('click',function(){var dark=document.body.classList.contains('light-mode');localStorage.setItem('theme',dark?'dark':'light');applyTheme(dark)})})();
     </script>
 </body>
 </html>
