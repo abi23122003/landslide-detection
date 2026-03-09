@@ -183,7 +183,7 @@
 
         /* Main Content */
         .container {
-            max-width: 800px;
+            max-width: 680px;
             margin: 0 auto;
             padding: 2rem 1rem;
         }
@@ -210,96 +210,164 @@
             animation: fadeIn 0.5s ease;
         }
 
+        /* ── NEW: Form grid & parameter cards ───────────────────── */
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
         }
 
-        .input-group {
+        .param-card {
             position: relative;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 1.4rem 1.5rem 1.2rem;
+            transition: all .35s cubic-bezier(.4,0,.2,1);
+            overflow: hidden;
         }
-
-        h3 {
-            color: rgba(255,255,255,0.85);
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
+        .param-card::before {
+            content:'';position:absolute;inset:0;border-radius:16px;
+            opacity:0;transition:opacity .35s;pointer-events:none;
         }
-
-        input {
-            width: 100%;
-            padding: 0.75rem;
-            border: 2px solid rgba(255,255,255,0.15);
-            border-radius: 8px;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-            background: rgba(255,255,255,0.08);
-            color: #fff;
+        .param-card.slope::before  {background:linear-gradient(135deg,rgba(237,137,54,0.10),transparent 60%);}
+        .param-card.rain::before   {background:linear-gradient(135deg,rgba(99,179,237,0.10),transparent 60%);}
+        .param-card.moisture::before{background:linear-gradient(135deg,rgba(72,187,120,0.10),transparent 60%);}
+        .param-card:hover::before {opacity:1;}
+        .param-card:hover {
+            border-color: rgba(255,255,255,0.18);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.25);
         }
+        body.light-mode .param-card {background:rgba(255,255,255,0.7);border-color:rgba(0,0,0,0.08);}
+        body.light-mode .param-card:hover {border-color:rgba(44,82,130,0.2);box-shadow:0 8px 30px rgba(0,0,0,0.08);}
 
-        input:focus {
-            outline: none;
-            border-color: #63b3ed;
-            box-shadow: 0 0 0 3px rgba(99, 179, 237, 0.25);
+        /* card header row */
+        .param-header {display:flex;align-items:center;gap:.75rem;margin-bottom:.85rem;}
+        .param-icon {
+            width:44px;height:44px;border-radius:12px;display:flex;align-items:center;
+            justify-content:center;font-size:1.15rem;flex-shrink:0;transition:transform .3s;
         }
+        .param-card:hover .param-icon {transform:scale(1.1) rotate(-4deg);}
+        .param-icon.slope  {background:rgba(237,137,54,0.15);color:#ed8936;}
+        .param-icon.rain   {background:rgba(99,179,237,0.15);color:#63b3ed;}
+        .param-icon.moisture{background:rgba(72,187,120,0.15);color:#48bb78;}
+        body.light-mode .param-icon.slope  {background:rgba(237,137,54,0.12);}
+        body.light-mode .param-icon.rain   {background:rgba(44,82,130,0.10);color:#2c5282;}
+        body.light-mode .param-icon.moisture{background:rgba(72,187,120,0.10);}
 
-        input::placeholder {
-            color: rgba(255,255,255,0.4);
+        .param-title-group {flex:1;}
+        .param-title {
+            font-size:.95rem;font-weight:600;color:#fff;margin:0;line-height:1.2;
         }
+        body.light-mode .param-title {color:#1a202c;}
 
+        .param-why {
+            font-size:.76rem;color:rgba(255,255,255,0.45);margin-top:2px;line-height:1.35;
+        }
+        body.light-mode .param-why {color:#718096;}
+
+        .param-badge {
+            font-size:.65rem;font-weight:600;padding:3px 8px;border-radius:20px;
+            letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;
+        }
+        .param-badge.slope  {background:rgba(237,137,54,0.15);color:#ed8936;}
+        .param-badge.rain   {background:rgba(99,179,237,0.15);color:#63b3ed;}
+        .param-badge.moisture{background:rgba(72,187,120,0.15);color:#48bb78;}
+
+        /* input row */
+        .param-input-row {display:flex;align-items:center;gap:.85rem;}
+        .param-input-row input[type="number"] {
+            flex:1;padding:.7rem .9rem;border:2px solid rgba(255,255,255,0.12);
+            border-radius:10px;font-size:.95rem;background:rgba(255,255,255,0.06);
+            color:#fff;transition:all .3s;-moz-appearance:textfield;
+        }
+        .param-input-row input[type="number"]::-webkit-inner-spin-button,
+        .param-input-row input[type="number"]::-webkit-outer-spin-button {-webkit-appearance:none;margin:0;}
+        .param-input-row input[type="number"]:focus {
+            outline:none;border-color:#63b3ed;box-shadow:0 0 0 3px rgba(99,179,237,0.2);
+        }
+        .param-input-row input[type="number"]::placeholder {color:rgba(255,255,255,0.3);}
+        body.light-mode .param-input-row input[type="number"] {background:#fff;border-color:#cbd5e0;color:#1a202c;}
+        body.light-mode .param-input-row input[type="number"]:focus {border-color:#2c5282;box-shadow:0 0 0 3px rgba(44,82,130,0.1);}
+        body.light-mode .param-input-row input[type="number"]::placeholder{color:#a0aec0;}
+
+        /* mini live gauge */
+        .mini-gauge {
+            width:52px;height:52px;position:relative;flex-shrink:0;
+        }
+        .mini-gauge svg {width:100%;height:100%;transform:rotate(-90deg);}
+        .mini-gauge circle {fill:none;stroke-width:5;stroke-linecap:round;}
+        .mini-gauge .bg  {stroke:rgba(255,255,255,0.07);}
+        body.light-mode .mini-gauge .bg {stroke:rgba(0,0,0,0.06);}
+        .mini-gauge .fill{transition:stroke-dashoffset .4s ease,stroke .4s;}
+        .gauge-val {
+            position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+            font-size:.6rem;font-weight:700;color:rgba(255,255,255,0.7);
+        }
+        body.light-mode .gauge-val {color:#2d3748;}
+
+        /* slider row */
+        .slider-row {margin-top:.65rem;}
+        .range-wrap {position:relative;width:100%;}
+        .range-wrap input[type="range"] {
+            -webkit-appearance:none;appearance:none;width:100%;height:6px;
+            border-radius:3px;outline:none;background:rgba(255,255,255,0.08);
+            transition:background .3s;cursor:pointer;
+        }
+        body.light-mode .range-wrap input[type="range"] {background:rgba(0,0,0,0.06);}
+        .range-wrap input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance:none;width:20px;height:20px;border-radius:50%;
+            border:3px solid #63b3ed;background:#1a202c;cursor:pointer;
+            box-shadow:0 0 8px rgba(99,179,237,0.3);transition:all .25s;
+        }
+        .range-wrap input[type="range"]::-webkit-slider-thumb:hover {
+            transform:scale(1.2);box-shadow:0 0 14px rgba(99,179,237,0.5);
+        }
+        body.light-mode .range-wrap input[type="range"]::-webkit-slider-thumb {
+            background:#fff;border-color:#2c5282;box-shadow:0 0 8px rgba(44,82,130,0.2);
+        }
+        .range-wrap input[type="range"]::-moz-range-thumb {
+            width:18px;height:18px;border-radius:50%;border:3px solid #63b3ed;
+            background:#1a202c;cursor:pointer;
+        }
+        .range-labels {display:flex;justify-content:space-between;margin-top:4px;}
+        .range-labels span {font-size:.65rem;color:rgba(255,255,255,0.3);}
+        body.light-mode .range-labels span {color:#a0aec0;}
+
+        /* ── Submit button ──────────────────────────────────────── */
         #sub {
-            width: 100%;
-            max-width: 300px;
-            margin: 2rem auto 0;
-            display: block;
-            padding: 1rem;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            width:100%;max-width:360px;margin:2rem auto 0;display:flex;
+            align-items:center;justify-content:center;gap:.6rem;
+            padding:1rem 1.5rem;border:none;border-radius:12px;
+            font-size:1.05rem;font-weight:600;cursor:pointer;color:#fff;
+            background:linear-gradient(135deg,#2c5282,#2b6cb0);
+            box-shadow:0 4px 15px rgba(44,82,130,0.35);
+            transition:all .35s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden;
         }
-
+        #sub::after {
+            content:'';position:absolute;inset:0;
+            background:linear-gradient(135deg,transparent 30%,rgba(255,255,255,0.12) 50%,transparent 70%);
+            transform:translateX(-100%);transition:transform .6s;
+        }
         #sub:hover {
-            background: var(--secondary-color);
-            transform: translateY(-2px);
+            transform:translateY(-3px);
+            box-shadow:0 8px 25px rgba(44,82,130,0.5);
+            background:linear-gradient(135deg,#2b6cb0,#3182ce);
         }
+        #sub:hover::after {transform:translateX(100%);}
+        #sub:active {transform:translateY(-1px);}
+        #sub .btn-icon {font-size:1.1rem;transition:transform .3s;}
+        #sub:hover .btn-icon {transform:rotate(-12deg) scale(1.1);}
 
-        .info-tooltip {
-            position: absolute;
-            right: -25px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--primary-color);
-            cursor: pointer;
+        /* help hint under the form */
+        .form-hint {
+            text-align:center;margin-top:1.2rem;font-size:.78rem;
+            color:rgba(255,255,255,0.35);line-height:1.5;
         }
-
-        .info-tooltip .tooltip-text {
-            visibility: hidden;
-            background-color: var(--dark-color);
-            color: white;
-            text-align: center;
-            padding: 5px 10px;
-            border-radius: 6px;
-            position: absolute;
-            z-index: 1;
-            width: 200px;
-            left: 50%;
-            transform: translateX(-50%);
-            bottom: 100%;
-            opacity: 0;
-            transition: opacity 0.3s;
-            font-size: 0.8rem;
-        }
-
-        .info-tooltip:hover .tooltip-text {
-            visibility: visible;
-            opacity: 1;
-        }
+        .form-hint i {color:#63b3ed;margin-right:4px;}
+        body.light-mode .form-hint {color:#718096;}
+        body.light-mode .form-hint i {color:#2c5282;}
 
         @keyframes fadeIn {
             from {
@@ -368,7 +436,10 @@
     <div class="container">
         <div class="container-heading">
             <h2 class='heading_font'>Landslide Risk Assessment</h2>
-            <p style="color: white; margin-top: 1rem;">Enter geological and environmental parameters for analysis</p>
+            <p style="color: rgba(255,255,255,0.65); margin-top: .75rem; font-size:.95rem; max-width:520px; margin-left:auto; margin-right:auto; line-height:1.55;">
+                <i class="fas fa-shield-alt" style="color:#63b3ed;margin-right:4px;"></i>
+                Enter geological &amp; environmental parameters to predict landslide risk in your area
+            </p>
         </div>
 
         <div class="ml-container">
@@ -382,37 +453,118 @@
             <form action="{{ url_for('predict') }}" method="POST" novalidate>
                 <div class="form-grid">
 
-                    <div class="input-group">
-                        <h3>Slope Angle (degrees)</h3>
-                        <input type="number" name="Slope Angle (degrees)"
-                               placeholder="e.g., 30" min="0" max="90" step="any"
-                               value="{{ old['Slope Angle (degrees)'] if old else '' }}" required>
-                        <div class="info-tooltip">
-                            <i class="fas fa-info-circle"></i>
-                            <span class="tooltip-text">Angle of the slope (0–90°)</span>
+                    <!-- ─── 1. Slope Angle ──────────────────────────── -->
+                    <div class="param-card slope">
+                        <div class="param-header">
+                            <div class="param-icon slope"><i class="fas fa-mountain"></i></div>
+                            <div class="param-title-group">
+                                <h3 class="param-title">Slope Angle</h3>
+                                <p class="param-why">Steeper slopes have less stability — gravity pulls soil &amp; debris downhill faster, making landslides more likely.</p>
+                            </div>
+                            <span class="param-badge slope">0 – 90°</span>
+                        </div>
+                        <div class="param-input-row">
+                            <input type="number" id="slope" name="Slope Angle (degrees)"
+                                   placeholder="Enter degrees (e.g. 30)"
+                                   min="0" max="90" step="any"
+                                   value="{{ old['Slope Angle (degrees)'] if old else '' }}" required>
+                            <div class="mini-gauge" id="gaugeSlope">
+                                <svg viewBox="0 0 52 52">
+                                    <circle class="bg" cx="26" cy="26" r="22"/>
+                                    <circle class="fill" cx="26" cy="26" r="22"
+                                            stroke="#ed8936"
+                                            stroke-dasharray="138.23"
+                                            stroke-dashoffset="138.23"/>
+                                </svg>
+                                <span class="gauge-val" id="gvSlope">0%</span>
+                            </div>
+                        </div>
+                        <div class="slider-row">
+                            <div class="range-wrap">
+                                <input type="range" id="sliderSlope" min="0" max="90" step="1" value="0">
+                                <div class="range-labels"><span>0° Flat</span><span>45° Steep</span><span>90° Vertical</span></div>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="input-group">
-                        <h3>Rainfall (mm)</h3>
-                        <input type="number" name="Rainfall (mm)"
-                               placeholder="e.g., 150" min="0" max="500" step="any"
-                               value="{{ old['Rainfall (mm)'] if old else '' }}" required>
+                    <!-- ─── 2. Rainfall ─────────────────────────────── -->
+                    <div class="param-card rain">
+                        <div class="param-header">
+                            <div class="param-icon rain"><i class="fas fa-cloud-showers-heavy"></i></div>
+                            <div class="param-title-group">
+                                <h3 class="param-title">Rainfall</h3>
+                                <p class="param-why">Heavy rain saturates the ground, adds weight, and reduces friction between soil layers — the #1 trigger for landslides.</p>
+                            </div>
+                            <span class="param-badge rain">0 – 500 mm</span>
+                        </div>
+                        <div class="param-input-row">
+                            <input type="number" id="rain" name="Rainfall (mm)"
+                                   placeholder="Enter mm (e.g. 150)"
+                                   min="0" max="500" step="any"
+                                   value="{{ old['Rainfall (mm)'] if old else '' }}" required>
+                            <div class="mini-gauge" id="gaugeRain">
+                                <svg viewBox="0 0 52 52">
+                                    <circle class="bg" cx="26" cy="26" r="22"/>
+                                    <circle class="fill" cx="26" cy="26" r="22"
+                                            stroke="#63b3ed"
+                                            stroke-dasharray="138.23"
+                                            stroke-dashoffset="138.23"/>
+                                </svg>
+                                <span class="gauge-val" id="gvRain">0%</span>
+                            </div>
+                        </div>
+                        <div class="slider-row">
+                            <div class="range-wrap">
+                                <input type="range" id="sliderRain" min="0" max="500" step="1" value="0">
+                                <div class="range-labels"><span>0 mm Dry</span><span>250 mm Heavy</span><span>500 mm Extreme</span></div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="input-group">
-                        <h3>Moisture Content (%)</h3>
-                        <input type="number" name="Moisture Content (%)"
-                               placeholder="e.g., 35" min="0" max="100" step="any"
-                               value="{{ old['Moisture Content (%)'] if old else '' }}" required>
+                    <!-- ─── 3. Moisture Content ─────────────────────── -->
+                    <div class="param-card moisture">
+                        <div class="param-header">
+                            <div class="param-icon moisture"><i class="fas fa-tint"></i></div>
+                            <div class="param-title-group">
+                                <h3 class="param-title">Moisture Content</h3>
+                                <p class="param-why">Wet soil is heavier and weaker — high moisture means the ground can flow like mud, drastically increasing slide risk.</p>
+                            </div>
+                            <span class="param-badge moisture">0 – 100 %</span>
+                        </div>
+                        <div class="param-input-row">
+                            <input type="number" id="moisture" name="Moisture Content (%)"
+                                   placeholder="Enter % (e.g. 35)"
+                                   min="0" max="100" step="any"
+                                   value="{{ old['Moisture Content (%)'] if old else '' }}" required>
+                            <div class="mini-gauge" id="gaugeMoisture">
+                                <svg viewBox="0 0 52 52">
+                                    <circle class="bg" cx="26" cy="26" r="22"/>
+                                    <circle class="fill" cx="26" cy="26" r="22"
+                                            stroke="#48bb78"
+                                            stroke-dasharray="138.23"
+                                            stroke-dashoffset="138.23"/>
+                                </svg>
+                                <span class="gauge-val" id="gvMoisture">0%</span>
+                            </div>
+                        </div>
+                        <div class="slider-row">
+                            <div class="range-wrap">
+                                <input type="range" id="sliderMoisture" min="0" max="100" step="1" value="0">
+                                <div class="range-labels"><span>0% Dry</span><span>50% Damp</span><span>100% Saturated</span></div>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
 
                 <button id="sub" type="submit">
-                    <i class="fas fa-calculator"></i>
+                    <i class="fas fa-calculator btn-icon"></i>
                     Calculate Risk
                 </button>
+                <p class="form-hint">
+                    <i class="fas fa-info-circle"></i>
+                    Drag the sliders or type values — the gauges update in real time to show how each factor contributes to risk.
+                </p>
             </form>
         </div>
     </div>
@@ -434,6 +586,41 @@
         }
         applyTheme((localStorage.getItem('theme')||'dark')==='dark');
         sw.addEventListener('change',()=>{const dark=sw.checked;localStorage.setItem('theme',dark?'dark':'light');applyTheme(dark);});
+
+        /* ── Interactive sliders + gauges ── */
+        const CIRC = 2 * Math.PI * 22; // ≈ 138.23
+
+        function wire(inputId, sliderId, gaugeId, gvId, max) {
+            const inp    = document.getElementById(inputId);
+            const slider = document.getElementById(sliderId);
+            const gauge  = document.getElementById(gaugeId);
+            const gv     = document.getElementById(gvId);
+            const circle = gauge.querySelector('.fill');
+
+            function update(val) {
+                val = Math.max(0, Math.min(max, parseFloat(val) || 0));
+                const pct = val / max;
+                circle.style.strokeDashoffset = CIRC * (1 - pct);
+
+                // colour shift: green → yellow → red
+                const r = Math.round(72 + pct * 180);
+                const g = Math.round(187 - pct * 140);
+                const b = Math.round(120 - pct * 80);
+                circle.style.stroke = `rgb(${r},${g},${b})`;
+
+                gv.textContent = Math.round(pct * 100) + '%';
+            }
+
+            inp.addEventListener('input', () => { slider.value = inp.value; update(inp.value); });
+            slider.addEventListener('input', () => { inp.value = slider.value; update(slider.value); });
+
+            // initialise from any pre-filled value
+            if (inp.value) { slider.value = inp.value; update(inp.value); }
+        }
+
+        wire('slope',    'sliderSlope',    'gaugeSlope',    'gvSlope',    90);
+        wire('rain',     'sliderRain',     'gaugeRain',     'gvRain',     500);
+        wire('moisture', 'sliderMoisture', 'gaugeMoisture', 'gvMoisture', 100);
     })();
     </script>
 </body>
